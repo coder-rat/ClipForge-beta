@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>ClipForge - Browser Video Editor</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f6fff'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='white'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="hl">
+        <h1>ClipForge</h1>
+        <span id="st">Import a video or image to begin. Everything runs locally in your browser.</span>
+      </div>
+      <button id="rc" title="Reset any shifted or scrolled view">Recenter view</button>
+      <div style="text-align: right"><button class="pri" id="exp">Export video</button></div>
+    </header>
+    <main>
+      <aside class="tool">
+        <label class="drop"
+          ><input id="file" type="file" accept="video/*,image/*,audio/*" multiple hidden /><b
+            >+ Import video, photo or audio</b
+          ><br /><small>or drop files here</small></label
+        >
+        <button id="addT">T&nbsp; Add text</button>
+        <button id="newP">New project</button>
+        <small>Your project autosaves locally and reopens where you left off.</small>
+        <label
+          >Canvas size<select id="ar">
+            <option value="1280x720">16:9 landscape</option>
+            <option value="720x1280">9:16 vertical</option>
+            <option value="960x960">1:1 square</option>
+          </select></label
+        >
+        <label><input type="checkbox" id="fill" /> Fill frame (crop to fit)</label>
+        <small
+          ><b>Shortcuts</b><br />Space = play/pause | S = split | Del = delete | Left/Right arrows = nudge 0.1
+          s</small
+        >
+      </aside>
+      <div class="stage"><canvas id="cv" width="1280" height="720"></canvas></div>
+      <aside id="insp"></aside>
+    </main>
+    <div id="bot">
+      <div id="bar">
+        <button id="home">Start</button><button id="play" class="pri">Play</button
+        ><button id="split">Split</button><button id="del">Delete</button> <button id="ml">Move left</button
+        ><button id="mr">Move right</button><span id="rd">0:00.0 / 0:00.0</span><span class="sp"></span>
+        <label><input type="checkbox" id="fit" checked /> Auto-fit</label>
+        <label>Zoom <input type="range" id="zm" min="1" max="200" value="60" /></label>
+      </div>
+      <div id="tl"><div id="in"></div></div>
+    </div>
+    <dialog id="dlg">
+      <h3 style="margin: 0 0 6px">Export</h3>
+      <label
+        >File name<input
+          id="fn"
+          type="text"
+          value="my-video"
+          style="
+            width: 100%;
+            box-sizing: border-box;
+            background: var(--p2);
+            border: 1px solid var(--b);
+            border-radius: 6px;
+            padding: 6px;
+          "
+      /></label>
+      <label
+        >Format<select id="fmt">
+          <option value="mp4">MP4 – video with sound</option>
+          <option value="gif">GIF – animated, no sound</option>
+          <option value="webm">WebM – video with sound</option>
+        </select></label
+      >
+      <div class="row"><button class="pri" id="go">Export</button><button id="cancel">Cancel</button></div>
+      <small
+        >MP4 needs a recent Chrome or Edge (otherwise you get WebM). GIF is up to 480 px wide, 10 frames per
+        second, no sound. Keep this tab visible while exporting.</small
+      >
+    </dialog>
+    <script src="js/core.js"></script>
+    <script src="js/media.js"></script>
+    <script src="js/gif.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/edit.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
