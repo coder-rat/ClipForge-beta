@@ -4,10 +4,14 @@ function syncA() {
     const e = a.el,
       d = a.out - a.in,
       l = a.in + t - a.start;
-    e._g.gain.value = a.vol;
+    if (e._g.gain.value !== a.vol) e._g.gain.value = a.vol;
     if (playing && t >= a.start && t < a.start + d) {
-      if (e.paused) e.play().catch(() => {});
-      if (Math.abs(e.currentTime - l) > 0.35) e.currentTime = l;
+      if (e.paused) {
+        e.currentTime = l;
+        e.play().catch(() => {});
+      } else if (!e.seeking && Math.abs(e.currentTime - l) > 1.5) {
+        e.currentTime = l;
+      }
     } else if (!e.paused) e.pause();
   });
 }
@@ -20,11 +24,11 @@ function sync() {
   if (!c || c.kind !== "video") return;
   const v = c.el,
     l = c.in + (t - c.start) * c.speed;
-  v._g.gain.value = c.vol;
+if (v._g.gain.value !== c.vol) v._g.gain.value = c.vol;
   v.playbackRate = c.speed;
   if (playing) {
     if (v.paused) v.play().catch(() => {});
-    if (Math.abs(v.currentTime - l) > 0.35) v.currentTime = l;
+    if (!v.seeking && Math.abs(v.currentTime - l) > 0.6) v.currentTime = l;
   } else {
     v.pause();
     if (Math.abs(v.currentTime - l) > 0.02) v.currentTime = l;
