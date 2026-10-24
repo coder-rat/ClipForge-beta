@@ -46,12 +46,31 @@ const vids = new Set(),
   msg = (h) => ($("#st").innerHTML = h);
 function audio() {
   if (!AC) {
-    AC = new AudioContext();
+    AC = new (window.AudioContext || window.webkitAudioContext)();
     mon = AC.createGain();
     mon.connect(AC.destination);
     dst = AC.createMediaStreamDestination();
   }
-  if (AC.state !== "running") AC.resume();
+  if (AC.state === "running") return Promise.resolve();
+  return Promise.race([AC.resume().catch(() => {}), new Promise((r) => setTimeout(r, 400))]);
+}
+function route(e) {
+  if (e._g) return;
+  audio();
+  const s = AC.createMediaElementSource(e),
+    g = AC.createGain();
+  g.gain.value = e._vol === undefined ? 1 : e._vol;
+  e.volume = 1;
+  s.connect(g);
+  g.connect(mon);
+  g.connect(dst);
+  e._g = g;
+}
+function setVol(e, v) {
+  e._vol = v;
+  if (e._g) {
+    if (e._g.gain.value !== v) e._g.gain.value = v;
+  } else e.volume = Math.min(1, v);
 }
 const PRE = {
   Normal: [100, 100, 100, 0, 0, 0],
