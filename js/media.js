@@ -18,12 +18,6 @@ async function addFiles(fl) {
         msg("Could not read " + esc(f.name));
         continue;
       }
-      const s = AC.createMediaElementSource(v),
-        g = AC.createGain();
-      s.connect(g);
-      g.connect(mon);
-      g.connect(dst);
-      v._g = g;
       vids.add(v);
       push("video", v, v.duration, f.name, mid);
     } else if (f.type.startsWith("image")) {
@@ -43,12 +37,6 @@ async function addFiles(fl) {
         msg("Could not read " + esc(f.name));
         continue;
       }
-      const s = AC.createMediaElementSource(a),
-        g = AC.createGain();
-      s.connect(g);
-      g.connect(mon);
-      g.connect(dst);
-      a._g = g;
       auds.push({ id: ++uid, name: f.name, mid, el: a, start: t, in: 0, out: a.duration, vol: 1 });
       sel = selT = null;
       selA = uid;
