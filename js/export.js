@@ -73,6 +73,7 @@ function endExp() {
 function exportVid(name, fmt) {
   if (!clips.length) return msg("Add a clip first.");
   audio();
+  [...vids, ...auds.map((a) => a.el)].forEach(route);
   setPlay(false);
   t = 0;
   sync();
