@@ -4,7 +4,7 @@ function syncA() {
     const e = a.el,
       d = a.out - a.in,
       l = a.in + t - a.start;
-    if (e._g.gain.value !== a.vol) e._g.gain.value = a.vol;
+    setVol(e, a.vol);
     if (playing && t >= a.start && t < a.start + d) {
       if (e.paused) {
         e.currentTime = l;
@@ -24,7 +24,7 @@ function sync() {
   if (!c || c.kind !== "video") return;
   const v = c.el,
     l = c.in + (t - c.start) * c.speed;
-if (v._g.gain.value !== c.vol) v._g.gain.value = c.vol;
+  setVol(v, c.vol);
   v.playbackRate = c.speed;
   if (playing) {
     if (v.paused) v.play().catch(() => {});
@@ -113,10 +113,23 @@ function updatePH() {
   }
   $("#rd").textContent = fmt(t) + " / " + fmt(total());
 }
-function setPlay(p) {
+function unlockMedia() {
+  [...vids, ...auds.map((a) => a.el)].forEach((e) => {
+    if (e._primed) return;
+    const p = e.play();
+    if (p)
+      p.then(() => {
+        e._primed = true;
+        e.pause();
+      }).catch(() => {});
+  });
+}
+async function setPlay(p) {
   if (p) {
     if (!clips.length) return;
-    audio();
+    unlockMedia();
+    await audio();
+    if (!exporting) mon.gain.value = 1;
     if (t >= total() - 0.01) t = 0;
   }
   playing = p;
